@@ -71,7 +71,7 @@ ws.onopen = async () => {
     null, // signature
     fromAdd,
     toAdd,
-    '100'
+    100
   )
   console.log('sign tx:',rawHex);
   if (HACK) {
@@ -97,7 +97,7 @@ ws.on('message', async (response) => {
     data.result, // signature
     fromAdd,
     toAdd,
-    '100'
+    100
   )
   console.log('keychain tx:',rawHex);
   // const rlpHex = rlp.encode(rawHex).toString('hex');
@@ -147,6 +147,8 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
   } else {
     const buffer = tx.serialize()
     const hex = buffer.toString('hex')
+
+    console.log('final hex: ', hex); // e605843b9aca0082520894e8899ba12578d60e4d0683a596edacbc85ec18cc83313030801c8080
     return hex;  
   }
 }
