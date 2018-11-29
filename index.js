@@ -32,8 +32,12 @@ const rsv =  async (signature, chainIdHere) => {
   ret.s = `0x${signature.slice(64, 128)}`;
   const recovery = parseInt(signature.slice(128, 130), 16);
  
-  const tmpV = chainIdHere ? recovery + (chainIdHere * 2 + 35) : recovery + 27;
- 
+  let tmpV = chainIdHere ? recovery + (chainIdHere * 2 + 35) : recovery + 27;
+  
+  if (chainIdHere > 0) {
+    tmpV += chainIdHere * 2 + 8;
+  }
+
   ret.v = `0x${tmpV}`;
   return ret;
 }
