@@ -4,7 +4,7 @@ const ethUtil = require('ethereumjs-util');
 const rlp = require('rlp');
 var txDecoder = require('ethereum-tx-decoder');
 
- 
+
 let flag = false;
 let buffer;
 
@@ -18,18 +18,18 @@ const WebSocket = require('ws');
 
 const ws = new WebSocket('ws://localhost:16384/');
 const keyname = 'test1@6de493f01bf590c0';
- 
+
 const toAdd = '0xE8899BA12578d60e4D0683a596EDaCbC85eC18CC';
- 
+
 const publicKey = '0x6a99ea8d33b64610e1c9ff689f3e95b6959a0cc039621154c7b69c019f015f4521bb9f3fc36a4d447002787d4d408da968185fc5116b8ffd385e8ad3196812e2';
 const privKey = '1552e84aa697185f06bbd8287725c63362b287bb45d0814308f409ba189f03ba'
-const fromAdd  = ethUtil.publicToAddress(publicKey).toString('hex');
+const fromAdd = ethUtil.publicToAddress(publicKey).toString('hex');
 
 
 console.log('fromAddress ', fromAdd);
- 
 
-const rsv =  async (signature, chainIdHere) => {
+
+const rsv = async (signature, chainIdHere) => {
   const ret = {};
   ret.r = `0x${signature.slice(0, 64)}`;
   ret.s = `0x${signature.slice(64, 128)}`;
@@ -38,7 +38,7 @@ const rsv =  async (signature, chainIdHere) => {
   if (chainIdHere > 0) {
     tmpV += chainIdHere * 2 + 8;
   }
-  ret.v = tmpV; 
+  ret.v = tmpV;
   return ret;
 }
 
@@ -68,12 +68,12 @@ ws.onopen = async () => {
     toAdd,
     100
   )
-  console.log('sign tx:',rawHex);
+  console.log('sign tx:', rawHex);
   sendCommand(signHexCommand(rawHex));
 }
 
 function sendCommand(command) {
-  ws.send(JSON.stringify(command));  
+  ws.send(JSON.stringify(command));
   console.log('command:', command);
 }
 
@@ -88,11 +88,11 @@ ws.on('message', async (response) => {
     toAdd,
     100
   )
-  console.log('keychain tx:',rawHex);
+  console.log('keychain tx:', rawHex);
   // const rlpHex = rlp.encode(rawHex).toString('hex');
   try {
     await publishTx(`0x${rawHex}`);
-  } catch(e) { 
+  } catch (e) {
     console.log(e);
   }
   ws.close();
@@ -123,20 +123,22 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
 
   if (signature) {
     const ret = await rsv(signature, chainIdHere);
-    txParams = { ...txParams, ...ret };
+    txParams = { ...txParams,
+      ...ret
+    };
   }
 
   console.log('tx keychain params', txParams)
 
   class EthereumTxKeychain extends EthereumTx {
-    hash (includeSignature) {
+    hash(includeSignature) {
       if (includeSignature === undefined) includeSignature = true
-  
+
       // EIP155 spec:
       // when computing the hash of a transaction for purposes of signing or recovering,
       // instead of hashing only the first six elements (ie. nonce, gasprice, startgas, to, value, data),
       // hash nine elements, with v replaced by CHAIN_ID, r = 0 and s = 0
-  
+
       let items
       if (includeSignature) {
         items = this.raw
@@ -163,11 +165,10 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
   } else {
     buffer = tx.hash(false);
   }
-  
+
   const hex = buffer.toString('hex')
 
   console.log('final hex: ', hex); // e605843b9aca0082520894e8899ba12578d60e4d0683a596edacbc85ec18cc83313030801c8080
-  return hex;  
+  return hex;
 
 }
- 
