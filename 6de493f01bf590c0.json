@@ -1,0 +1,11 @@
+{
+  "filetype": "TYPE_KEY",
+  "keyname": "test1@6de493f01bf590c0",
+  "keyinfo": {
+    "format": "FORMAT_ARRAYIO",
+    "encrypted": false,
+    "curve_type": "secp256k1",
+    "priv_key_data": "1552e84aa697185f06bbd8287725c63362b287bb45d0814308f409ba189f03ba",
+    "public_key": "6a99ea8d33b64610e1c9ff689f3e95b6959a0cc039621154c7b69c019f015f4521bb9f3fc36a4d447002787d4d408da968185fc5116b8ffd385e8ad3196812e2"
+  }
+}
