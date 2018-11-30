@@ -8,7 +8,8 @@ var txDecoder = require('ethereum-tx-decoder');
 let flag = false;
 let buffer;
 
-const API_KEY = 'https://rinkeby.infura.io/v3/046804e3dd3240b09834531326f310cf';
+// const API_KEY = 'https://rinkeby.infura.io/v3/046804e3dd3240b09834531326f310cf';
+const API_KEY = 'https://ropsten.infura.io/v3/046804e3dd3240b09834531326f310cf';
 const API_KEY_ALEXEY = 'https://rinkeby.infura.io/JCnK5ifEPH9qcQkX0Ahl';
 // const GANACHE = 'http://127.0.0.1:7545';
 let web3 = new Web3(new Web3.providers.HttpProvider(API_KEY)); //
@@ -101,7 +102,7 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
   console.log('buildTxSinature')
   const nonce = await web3.eth.getTransactionCount(fromAddress);
   const gasPrice = await web3.eth.getGasPrice().then(wei => Number(wei))
-  const chainIdHere = 4;
+  const chainIdHere = 3;
 
   const draftTxParams = {
     nonce,
