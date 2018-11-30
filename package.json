@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ethereum-tx-decoder": "^2.0.1",
     "ethereumjs-tx": "^1.3.7",
     "ethereumjs-util": "^6.0.0",
     "rlp": "^2.1.0",
