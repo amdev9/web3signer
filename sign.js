@@ -24,8 +24,8 @@ const fromAdd  = ethUtil.publicToAddress(publicKey).toString('hex');
 
 console.log('fromAddress ', fromAdd);
 
-web3.eth.getBalance(fromAdd) 
-.then(console.log);
+// web3.eth.getBalance(fromAdd) 
+// .then(console.log);
 
 const publishTx = async (rawhex) => {
   var decodedTx = txDecoder.decodeTx(rawhex);

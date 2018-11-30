@@ -26,33 +26,30 @@ const fromAdd  = ethUtil.publicToAddress(publicKey).toString('hex');
 
 
 console.log('fromAddress ', fromAdd);
-
-web3.eth.getBalance(fromAdd) 
-.then(console.log);
-
+ 
 
 const rsv =  async (signature, chainIdHere) => {
   const ret = {};
   ret.r = `0x${signature.slice(0, 64)}`;
   ret.s = `0x${signature.slice(64, 128)}`;
 
-  console.log(signature.slice(128, 130))
-  // const recovery = null; //parseInt(signature.slice(128, 130), 16);
+ 
+  const recovery = 0;// parseInt(signature.slice(128, 130), 16);
 
-  // let tmpV = chainIdHere ? recovery + (chainIdHere * 2 + 35) : recovery + 27;
+  let tmpV = chainIdHere ? recovery + (chainIdHere * 2 + 35) : recovery + 27;
   // if (chainIdHere > 0) {
   //   tmpV += chainIdHere * 2 + 8;
   // }
-  // console.log('--------> ', tmpV);
-  ret.v = `0x${signature.slice(128, 130)}`;
-  // ret.v = 44; //'0x1c';
+  console.log('--------> ', tmpV);
+  ret.v = `0x${tmpV}`;
+  // ret.v = 44; 
   return ret;
 }
 
 const publishTx = async (rawhex) => {
   var decodedTx = txDecoder.decodeTx(rawhex);
   console.log('decodedTx: ', decodedTx);
-  return web3.eth.sendSignedTransaction(rawhex)
+  // return web3.eth.sendSignedTransaction(rawhex)
 }
 
 const signHexCommand = (hexraw) => {
