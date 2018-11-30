@@ -4,7 +4,7 @@ const ethUtil = require('ethereumjs-util');
 const rlp = require('rlp');
 var txDecoder = require('ethereum-tx-decoder');
 
-const HACK = false;
+ 
 let flag = false;
 let buffer;
 
@@ -36,22 +36,20 @@ const rsv =  async (signature, chainIdHere) => {
   ret.r = `0x${signature.slice(0, 64)}`;
   ret.s = `0x${signature.slice(64, 128)}`;
   // const recovery = parseInt(signature.slice(128, 130), 16);
- 
+
   // let tmpV = chainIdHere ? recovery + (chainIdHere * 2 + 35) : recovery + 27;
-  
   // if (chainIdHere > 0) {
   //   tmpV += chainIdHere * 2 + 8;
   // }
-
   // ret.v = `0x${tmpV}`;
-  ret.v = '0x1c';
+  ret.v = 44; //'0x1c';
   return ret;
 }
 
 const publishTx = async (rawhex) => {
   var decodedTx = txDecoder.decodeTx(rawhex);
   console.log('decodedTx: ', decodedTx);
-  // return web3.eth.sendSignedTransaction(rawhex)
+  return web3.eth.sendSignedTransaction(rawhex)
 }
 
 const signHexCommand = (hexraw) => {
@@ -65,13 +63,6 @@ const signHexCommand = (hexraw) => {
   }
 }
 
-const publicKeyCommand = { 
-  "command": "public_key",
-  "params": 
-  {
-    "keyname": keyname
-  }
-}
 
 ws.onopen = async () => {
   console.log('ws open');
@@ -82,14 +73,7 @@ ws.onopen = async () => {
     100
   )
   console.log('sign tx:',rawHex);
-  if (HACK) {
-    const res = await publishTx(`0x${rawHex}`);
-    console.log("result transaction: ", res);
-  } else {
-  
-    sendCommand(signHexCommand(rawHex));
-  }
-
+  sendCommand(signHexCommand(rawHex));
 }
 
 function sendCommand(command) {
@@ -148,7 +132,6 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
 
   console.log('tx keychain params', txParams)
 
-  
   class EthereumTxKeychain extends EthereumTx {
     hash (includeSignature) {
       if (includeSignature === undefined) includeSignature = true
@@ -173,31 +156,22 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
           items = this.raw.slice(0, 6)
         }
       }
-  
       // create hash
       return rlp.encode(items)
     }
-  
   }
 
-  const tx = new EthereumTxKeychain(txParams)
-
-  if (HACK) {
-    const privateKey = Buffer.from(privKey, 'hex');
-    tx.sign(privateKey);
-    return tx.serialize().toString('hex');   
+  const tx = new EthereumTxKeychain(txParams);
+  if (flag) {
+    buffer = tx.serialize()
   } else {
-
-    if (flag) {
-      buffer = tx.serialize()
-    } else {
-      buffer = tx.hash(false);
-    }
-    
-    const hex = buffer.toString('hex')
-
-    console.log('final hex: ', hex); // e605843b9aca0082520894e8899ba12578d60e4d0683a596edacbc85ec18cc83313030801c8080
-    return hex;  
+    buffer = tx.hash(false);
   }
+  
+  const hex = buffer.toString('hex')
+
+  console.log('final hex: ', hex); // e605843b9aca0082520894e8899ba12578d60e4d0683a596edacbc85ec18cc83313030801c8080
+  return hex;  
+
 }
  
