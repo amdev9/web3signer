@@ -32,24 +32,19 @@ const rsv =  async (signature, chainIdHere) => {
   const ret = {};
   ret.r = `0x${signature.slice(0, 64)}`;
   ret.s = `0x${signature.slice(64, 128)}`;
-
- 
-  const recovery = 0;// parseInt(signature.slice(128, 130), 16);
-
-  let tmpV = chainIdHere ? recovery + (chainIdHere * 2 + 35) : recovery + 27;
-  // if (chainIdHere > 0) {
-  //   tmpV += chainIdHere * 2 + 8;
-  // }
-  console.log('--------> ', tmpV);
-  ret.v = `0x${tmpV}`;
-  // ret.v = 44; 
+  const recovery = parseInt(signature.slice(128, 130), 16);
+  let tmpV = recovery + 27;
+  if (chainIdHere > 0) {
+    tmpV += chainIdHere * 2 + 8;
+  }
+  ret.v = tmpV; 
   return ret;
 }
 
 const publishTx = async (rawhex) => {
   var decodedTx = txDecoder.decodeTx(rawhex);
   console.log('decodedTx: ', decodedTx);
-  // return web3.eth.sendSignedTransaction(rawhex)
+  return web3.eth.sendSignedTransaction(rawhex)
 }
 
 const signHexCommand = (hexraw) => {
