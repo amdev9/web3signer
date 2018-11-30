@@ -35,14 +35,17 @@ const rsv =  async (signature, chainIdHere) => {
   const ret = {};
   ret.r = `0x${signature.slice(0, 64)}`;
   ret.s = `0x${signature.slice(64, 128)}`;
-  // const recovery = parseInt(signature.slice(128, 130), 16);
+
+  console.log(signature.slice(128, 130))
+  // const recovery = null; //parseInt(signature.slice(128, 130), 16);
 
   // let tmpV = chainIdHere ? recovery + (chainIdHere * 2 + 35) : recovery + 27;
   // if (chainIdHere > 0) {
   //   tmpV += chainIdHere * 2 + 8;
   // }
-  // ret.v = `0x${tmpV}`;
-  ret.v = 44; //'0x1c';
+  // console.log('--------> ', tmpV);
+  ret.v = `0x${signature.slice(128, 130)}`;
+  // ret.v = 44; //'0x1c';
   return ret;
 }
 
