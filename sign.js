@@ -11,10 +11,6 @@ const API_KEY_ALEXEY = 'https://rinkeby.infura.io/JCnK5ifEPH9qcQkX0Ahl';
 // const GANACHE = 'http://127.0.0.1:7545';
 let web3 = new Web3(new Web3.providers.HttpProvider(API_KEY)); //
 
-const WebSocket = require('ws');
-
-const ws = new WebSocket('ws://localhost:16384/');
-const keyname = 'test1@6de493f01bf590c0';
  
 const toAdd = '0xE8899BA12578d60e4D0683a596EDaCbC85eC18CC';
  
