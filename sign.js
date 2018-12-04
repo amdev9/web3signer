@@ -11,12 +11,11 @@ const API_KEY_ALEXEY = 'https://rinkeby.infura.io/JCnK5ifEPH9qcQkX0Ahl';
 // const GANACHE = 'http://127.0.0.1:7545';
 let web3 = new Web3(new Web3.providers.HttpProvider(API_KEY)); //
 
- 
 const toAdd = '0xE8899BA12578d60e4D0683a596EDaCbC85eC18CC';
- 
+
 const publicKey = '0x6a99ea8d33b64610e1c9ff689f3e95b6959a0cc039621154c7b69c019f015f4521bb9f3fc36a4d447002787d4d408da968185fc5116b8ffd385e8ad3196812e2';
 const privKey = '1552e84aa697185f06bbd8287725c63362b287bb45d0814308f409ba189f03ba'
-const fromAdd  = ethUtil.publicToAddress(publicKey).toString('hex');
+const fromAdd = ethUtil.publicToAddress(publicKey).toString('hex');
 
 
 console.log('fromAddress ', fromAdd);
@@ -29,9 +28,9 @@ const publishTx = async (rawhex) => {
   console.log('decodedTx: ', decodedTx);
   return web3.eth.sendSignedTransaction(rawhex)
 }
- 
+
 const main = async () => {
-  
+
   const buildTxSinature = async (signature, fromAddress, to, value, data = '') => {
     console.log('buildTxSinature')
     const nonce = await web3.eth.getTransactionCount(fromAddress);
@@ -62,12 +61,12 @@ const main = async () => {
 
     console.log('tx keychain params', txParams)
 
-    const tx = new EthereumTx (txParams)
+    const tx = new EthereumTx(txParams)
 
     const privateKey = Buffer.from(privKey, 'hex');
     tx.sign(privateKey);
-    return tx.serialize().toString('hex');   
-  
+    return tx.serialize().toString('hex');
+
   }
 
   const rawHex = await buildTxSinature(
@@ -76,7 +75,7 @@ const main = async () => {
     toAdd,
     100
   )
-  console.log('sign tx:',rawHex);
+  console.log('sign tx:', rawHex);
 
   const res = await publishTx(`0x${rawHex}`);
   console.log("result transaction: ", res);
