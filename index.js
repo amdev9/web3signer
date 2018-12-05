@@ -131,7 +131,7 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
   console.log('tx keychain params', txParams)
 
   class EthereumTxKeychain extends EthereumTx {
-    hash(includeSignature) {
+    hashEncode(includeSignature) {
       if (includeSignature === undefined) includeSignature = true
 
       // EIP155 spec:
@@ -161,9 +161,10 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
 
   const tx = new EthereumTxKeychain(txParams);
   if (flag) {
+    console.log("validate sign transaction status: ", tx.validate() ? "SUCCESS" : "FAILURE");
     buffer = tx.serialize()
   } else {
-    buffer = tx.hash(false);
+    buffer = tx.hashEncode(false);
   }
 
   const hex = buffer.toString('hex')

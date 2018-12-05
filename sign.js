@@ -65,6 +65,7 @@ const main = async () => {
 
     const privateKey = Buffer.from(privKey, 'hex');
     tx.sign(privateKey);
+    console.log("validate sign transaction ", tx.validate() ? "SUCCESSFULL" : "FAILURE");
     return tx.serialize().toString('hex');
 
   }
