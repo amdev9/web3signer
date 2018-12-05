@@ -162,6 +162,7 @@ const buildTxSinature = async (signature, fromAddress, to, value, data = '') => 
   const tx = new EthereumTxKeychain(txParams);
   if (flag) {
     console.log("validate sign transaction status: ", tx.validate() ? "SUCCESS" : "FAILURE");
+    console.log(tx.getSenderPublicKey()); // compare with public key from keychain
     buffer = tx.serialize()
   } else {
     buffer = tx.hashEncode(false);
